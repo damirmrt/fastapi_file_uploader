@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body, Cookie
+from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import Response
 
 
@@ -7,9 +7,12 @@ app = FastAPI()
 
 @app.get("/")
 def index_page():
-    return Response('hello world', media_type="text/html")
+    with open(file=".\\templates\index.html", encoding="utf-8") as html_file:
+        html_page = html_file.read()
+    return Response(html_page, media_type="text/html")
 
 
-@app.post("/upload")
+@app.post("/upload/")
 def login_process():
-    return Response('hello world', media_type="text/html")
+    async def create_upload_file(file: UploadFile):
+        return {"filename": file.filename}
