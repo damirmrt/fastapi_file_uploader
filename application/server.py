@@ -13,6 +13,10 @@ def index_page():
 
 
 @app.post("/upload/")
-def login_process():
-    async def create_upload_file(file: UploadFile):
-        return {"filename": file.filename}
+def upload(file: UploadFile = File(...)):
+    file_content = file.file.read()
+    with open(file.filename, 'wb') as f:
+        # PUT YOUR MAGIC HERE
+        f.write(file_content)
+    file.file.close()
+    return Response(f"Successfully uploaded and processed {file.filename}", media_type="text/html")
